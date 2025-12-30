@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DESTIN | Explore the Infinite</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0f172a;
+            --accent: #c5a059;
+            --bg-light: #f8fafc;
+            --white: #ffffff;
+            --transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background: var(--white); color: var(--primary); scroll-behavior: smooth; }
+
+        /* HEADER & NAV */
+        header {
+            position: fixed; top: 0; width: 100%; padding: 20px 8%;
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(15px);
+            z-index: 1000; border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+        .logo { font-size: 24px; font-weight: 800; letter-spacing: 2px; }
+        nav a { margin: 0 15px; text-decoration: none; color: var(--primary); font-weight: 600; font-size: 14px; transition: 0.3s; }
+        nav a:hover { color: var(--accent); }
+        .reg-btn { background: var(--primary); color: white; padding: 12px 25px; border-radius: 50px; cursor: pointer; font-weight: 600; transition: var(--transition); }
+        .reg-btn:hover { background: var(--accent); transform: scale(1.05); }
+
+        /* HERO */
+        .hero {
+            height: 85vh; background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.5)), 
+            url('https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=2074') center/cover;
+            display: flex; align-items: center; justify-content: center; text-align: center; color: white;
+        }
+        .hero h1 { font-size: 72px; font-weight: 800; line-height: 1.1; }
+
+        /* STATS SECTION */
+        .stats-bar { display: flex; justify-content: space-around; padding: 40px 10%; background: var(--bg-light); text-align: center; }
+        .stat-item h2 { font-size: 32px; color: var(--accent); }
+        .stat-item p { font-size: 14px; opacity: 0.7; font-weight: 600; }
+
+        /* COUNTRIES SECTION */
+        .section { padding: 100px 10%; }
+        .section-header { margin-bottom: 60px; }
+        .section-header h2 { font-size: 42px; font-weight: 800; }
+        .section-header p { color: #64748b; font-size: 18px; margin-top: 10px; }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 40px; }
+        
+        .country-card {
+            border-radius: 30px; overflow: hidden; position: relative; height: 450px; cursor: pointer;
+            transition: var(--transition);
+        }
+        .country-card img { width: 100%; height: 100%; object-fit: cover; transition: 0.6s; }
+        .country-card:hover img { transform: scale(1.1); }
+        
+        .card-overlay {
+            position: absolute; bottom: 0; width: 100%; padding: 40px;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8)); color: white;
+        }
+        .card-tag { background: var(--accent); color: white; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; margin-bottom: 10px; display: inline-block; }
+
+        /* FEATURED SPLIT SECTION */
+        .split-section { display: flex; align-items: center; gap: 50px; padding: 100px 10%; background: #000; color: white; overflow: hidden; }
+        .split-img { flex: 1; border-radius: 40px; overflow: hidden; height: 500px; }
+        .split-img img { width: 100%; height: 100%; object-fit: cover; }
+        .split-text { flex: 1; }
+        .split-text h3 { font-size: 36px; margin-bottom: 20px; }
+        .split-text p { opacity: 0.8; margin-bottom: 30px; font-size: 18px; line-height: 1.8; }
+
+        /* SERVICES/ICONS */
+        .services { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; text-align: center; }
+        .service-box i { font-size: 40px; color: var(--accent); margin-bottom: 20px; }
+        .service-box h4 { margin-bottom: 10px; font-size: 20px; }
+
+        /* MODAL */
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 2000; }
+        .modal-card { background: white; padding: 50px; border-radius: 40px; width: 90%; max-width: 500px; position: relative; }
+        .close-modal { position: absolute; top: 25px; right: 30px; font-size: 30px; cursor: pointer; }
+        input { width: 100%; padding: 15px; margin: 10px 0; border: 1px solid #eee; border-radius: 15px; background: #f9f9f9; }
+        .submit-btn { width: 100%; padding: 18px; background: var(--primary); color: white; border: none; border-radius: 15px; font-weight: 700; cursor: pointer; margin-top: 20px; }
+
+        /* FOOTER */
+        footer { background: #0b0f1a; color: white; padding: 100px 10% 40px; }
+        .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 50px; margin-bottom: 80px; }
+        .footer-logo { font-size: 28px; font-weight: 800; margin-bottom: 20px; }
+        .footer-links h5 { margin-bottom: 25px; font-size: 18px; color: var(--accent); }
+        .footer-links p { margin-bottom: 12px; opacity: 0.6; cursor: pointer; transition: 0.3s; }
+        .footer-links p:hover { opacity: 1; color: var(--accent); }
+        .ai-support { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 40px; display: flex; align-items: center; justify-content: center; gap: 10px; color: #94a3b8; }
+
+        @media (max-width: 900px) {
+            .split-section { flex-direction: column; }
+            .hero h1 { font-size: 48px; }
+            header nav { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">DESTIN</div>
+        <nav>
+            <a href="#home">Home</a>
+            <a href="#destinations">Destinations</a>
+            <a href="#experience">Experience</a>
+            <a href="#about">Our Story</a>
+        </nav>
+        <div class="reg-btn" id="openReg">Join the Club</div>
+    </header>
+
+    <section class="hero" id="home">
+        <div>
+            <h1>Discover Your<br><span style="color: var(--accent);">Next Chapter</span></h1>
+        </div>
+    </section>
+
+    <div class="stats-bar">
+        <div class="stat-item"><h2>120+</h2><p>DESTINATIONS</p></div>
+        <div class="stat-item"><h2>50k+</h2><p>HAPPY TRAVELERS</p></div>
+        <div class="stat-item"><h2>15+</h2><p>AWARDS WON</p></div>
+        <div class="stat-item"><h2>24/7</h2><p>AI SUPPORT</p></div>
+    </div>
+
+    <section class="section" id="destinations">
+        <div class="section-header">
+            <h2>Trending Now</h2>
+            <p>Handpicked escapes for the sophisticated wanderer.</p>
+        </div>
+        <div class="grid">
+            <div class="country-card">
+                <img src="https://images.unsplash.com/photo-1534067783941-51c9c23ecefd?q=80&w=600" alt="Swiss">
+                <div class="card-overlay">
+                    <span class="card-tag">Europe</span>
+                    <h3>Zermatt, Switzerland</h3>
+                    <p>Experience the ultimate luxury in the shadow of the Matterhorn.</p>
+                </div>
+            </div>
+            <div class="country-card">
+                <img src="https://images.unsplash.com/photo-1513519107127-1bed33748e4c?q=80&w=600" alt="Norway">
+                <div class="card-overlay">
+                    <span class="card-tag">Arctic</span>
+                    <h3>Lofoten Islands, Norway</h3>
+                    <p>Chase the Aurora Borealis in traditional fishermen huts.</p>
+                </div>
+            </div>
+            <div class="country-card">
+                <img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?q=80&w=600" alt="Bali">
+                <div class="card-overlay">
+                    <span class="card-tag">Tropical</span>
+                    <h3>Ubud, Indonesia</h3>
+                    <p>Reconnect with your spirit amidst emerald rice terraces.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="split-section">
+        <div class="split-img">
+            <img src="https://images.unsplash.com/photo-1510414842594-a61c69b5ae57?q=80&w=1000" alt="Sea">
+        </div>
+        <div class="split-text">
+            <span style="color:var(--accent); font-weight:800; text-transform:uppercase;">Summer Spotlight</span>
+            <h3>Private Mediterranean Charters</h3>
+            <p>Navigate the hidden coves of the Greek Isles aboard our world-class yachts. Complete with a private chef and local navigator.</p>
+            <button class="reg-btn" style="background:white; color:black;">Explore Fleet</button>
+        </div>
+    </section>
+
+    <section class="section" id="experience" style="background:#fcfcfc;">
+        <div class="section-header" style="text-align:center;">
+            <h2>The Destin Experience</h2>
+        </div>
+        <div class="services">
+            <div class="service-box">
+                <i class="fa-solid fa-plane-departure"></i>
+                <h4>Seamless Transit</h4>
+                <p>Private jets and VIP lounge access worldwide.</p>
+            </div>
+            <div class="service-box">
+                <i class="fa-solid fa-hotel"></i>
+                <h4>Curated Hotels</h4>
+                <p>Only 5-star properties vetted by our experts.</p>
+            </div>
+            <div class="service-box">
+                <i class="fa-solid fa-map-location-dot"></i>
+                <h4>Local Guides</h4>
+                <p>Private historians and cultural navigators.</p>
+            </div>
+            <div class="service-box">
+                <i class="fa-solid fa-shield-halved"></i>
+                <h4>Global Security</h4>
+                <p>24/7 concierge and travel insurance included.</p>
+            </div>
+        </div>
+    </section>
+
+    <div class="modal" id="modal">
+        <div class="modal-card">
+            <span class="close-modal" id="close">&times;</span>
+            <h2 style="font-weight:800; margin-bottom:10px;">Register</h2>
+            <p style="opacity:0.6; margin-bottom:20px;">Unlock exclusive member rates and travel tips.</p>
+            <form id="regForm">
+                <input type="text" id="fname" placeholder="First Name" required>
+                <input type="text" id="lname" placeholder="Last Name" required>
+                <input type="tel" id="phone" placeholder="Phone Number" required>
+                <div style="display:flex; align-items:center; gap:10px; margin-top:10px;">
+                    <input type="checkbox" id="check" required style="width:20px;">
+                    <label style="font-size:12px;">Agree to Terms & Privacy Policy</label>
+                </div>
+                <button type="submit" class="submit-btn" id="submitBtn">Send Application</button>
+            </form>
+            <p id="status" style="margin-top:20px; text-align:center; font-weight:700;"></p>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-grid">
+            <div>
+                <div class="footer-logo">DESTIN</div>
+                <p style="opacity:0.5; max-width:300px;">Crafting meaningful journeys for the world's most curious souls since 2018.</p>
+                <div style="margin-top:30px; font-size:24px;">
+                    <a href="#" style="color:white; margin-right:15px;"><i class="fa-brands fa-telegram"></i></a>
+                    <a href="#" style="color:white; margin-right:15px;"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" style="color:white;"><i class="fa-brands fa-x-twitter"></i></a>
+                </div>
+            </div>
+            <div class="footer-links">
+                <h5>Destinations</h5>
+                <p>Europe</p><p>Southeast Asia</p><p>South America</p><p>The Arctic</p>
+            </div>
+            <div class="footer-links">
+                <h5>Company</h5>
+                <p>Our Story</p><p>Careers</p><p>Privacy Policy</p><p>Contact Us</p>
+            </div>
+        </div>
+        <div class="ai-support">
+            <i class="fa-solid fa-microchip"></i>
+            <span>Support Center AI • Online & Ready</span>
+        </div>
+    </footer>
+
+    <script>
+        // MODAL TOGGLE
+        const modal = document.getElementById('modal');
+        const openBtn = document.getElementById('openReg');
+        const closeBtn = document.getElementById('close');
+
+        openBtn.onclick = () => modal.style.display = 'flex';
+        closeBtn.onclick = () => modal.style.display = 'none';
+
+        // TELEGRAM BOT API
+        const TOKEN = "YOUR_BOT_TOKEN";
+        const CHAT_ID = "YOUR_CHAT_ID";
+
+        document.getElementById('regForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            const status = document.getElementById('status');
+            
+            btn.innerText = "Sending Data...";
+            btn.disabled = true;
+
+            const text = `
+🌍 *New VIP Lead*
+━━━━━━━━━━━━━
+👤 *Name:* ${document.getElementById('fname').value} ${document.getElementById('lname').value}
+📞 *Phone:* ${document.getElementById('phone').value}
+━━━━━━━━━━━━━`;
+
+            try {
+                const res = await fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ chat_id: CHAT_ID, text: text, parse_mode: 'Markdown' })
+                });
+
+                if(res.ok) {
+                    status.innerHTML = "✅ Welcome aboard! We'll contact you soon.";
+                    status.style.color = "green";
+                    setTimeout(() => { modal.style.display = 'none'; document.getElementById('regForm').reset(); status.innerHTML = ""; }, 3000);
+                }
+            } catch (err) {
+                status.innerHTML = "❌ Connection error.";
+                status.style.color = "red";
+            } finally {
+                btn.innerText = "Send Application";
+                btn.disabled = false;
+            }
+        };
+    </script>
+</body>
+</html>
