@@ -245,54 +245,107 @@
         </div>
     </footer>
 
-    <script>
-        // MODAL TOGGLE
-        const modal = document.getElementById('modal');
-        const openBtn = document.getElementById('openReg');
-        const closeBtn = document.getElementById('close');
+   <script>
+    // ================= MODAL =================
+    const modal = document.getElementById('modal');
+    const openBtn = document.getElementById('openReg');
+    const closeBtn = document.getElementById('close');
 
-        openBtn.onclick = () => modal.style.display = 'flex';
-        closeBtn.onclick = () => modal.style.display = 'none';
+    openBtn.onclick = () => modal.style.display = 'flex';
+    closeBtn.onclick = () => modal.style.display = 'none';
 
-        // TELEGRAM BOT API
-        const TOKEN = "8393115402:AAEKQNnghoOJBArCcVgCXKUQt5jOj5s3ru0";
-        const CHAT_ID = "8319246696";
+    // ================= TELEGRAM =================
+    const TOKEN = "8393115402:AAEKQNnghoOJBArCcVgCXKUQt5jOj5s3ru0";
+    const CHAT_ID = "8319246696";
 
-        document.getElementById('regForm').onsubmit = async (e) => {
-            e.preventDefault();
-            const btn = document.getElementById('submitBtn');
-            const status = document.getElementById('status');
-            
-            btn.innerText = "Sending Data...";
-            btn.disabled = true;
+    // =================================================
+    // 1️⃣ SAYTGA KIRGAN USER (AUTO)
+    // =================================================
+    async function sendVisitorInfo() {
+        try {
+            const ipRes = await fetch("https://api.ipify.org?format=json");
+            const ipData = await ipRes.json();
 
             const text = `
-🌍 *New VIP Lead*
-━━━━━━━━━━━━━
-👤 *Name:* ${document.getElementById('fname').value} ${document.getElementById('lname').value}
-📞 *Phone:* ${document.getElementById('phone').value}
-━━━━━━━━━━━━━`;
+👀 *NEW VISITOR*
+━━━━━━━━━━━━━━
+🖥 Platform: ${navigator.platform}
+🌍 Language: ${navigator.language}
+📱 Screen: ${screen.width}x${screen.height}
+🧠 Browser: ${navigator.userAgent}
+🌐 IP: ${ipData.ip}
+⏰ Time: ${new Date().toLocaleString()}
+━━━━━━━━━━━━━━`;
 
-            try {
-                const res = await fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ chat_id: CHAT_ID, text: text, parse_mode: 'Markdown' })
-                });
+            await fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    chat_id: CHAT_ID,
+                    text: text,
+                    parse_mode: "Markdown"
+                })
+            });
+        } catch (e) {
+            console.log("Visitor info error");
+        }
+    }
 
-                if(res.ok) {
-                    status.innerHTML = "✅ Welcome aboard! We'll contact you soon.";
-                    status.style.color = "green";
-                    setTimeout(() => { modal.style.display = 'none'; document.getElementById('regForm').reset(); status.innerHTML = ""; }, 3000);
-                }
-            } catch (err) {
-                status.innerHTML = "❌ Connection error.";
-                status.style.color = "red";
-            } finally {
-                btn.innerText = "Send Application";
-                btn.disabled = false;
+    // Sahifa ochilishi bilan 1 marta ishlaydi
+    sendVisitorInfo();
+
+    // =================================================
+    // 2️⃣ REGISTRATSIYA QILGAN USER
+    // =================================================
+    document.getElementById('regForm').onsubmit = async (e) => {
+        e.preventDefault();
+
+        const btn = document.getElementById('submitBtn');
+        const status = document.getElementById('status');
+
+        btn.innerText = "Sending...";
+        btn.disabled = true;
+
+        const text = `
+📝 *NEW REGISTRATION*
+━━━━━━━━━━━━━━
+👤 Name: ${document.getElementById('fname').value} ${document.getElementById('lname').value}
+📞 Phone: ${document.getElementById('phone').value}
+🖥 Platform: ${navigator.platform}
+🌐 Browser: ${navigator.userAgent}
+⏰ Time: ${new Date().toLocaleString()}
+━━━━━━━━━━━━━━`;
+
+        try {
+            const res = await fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    chat_id: CHAT_ID,
+                    text: text,
+                    parse_mode: "Markdown"
+                })
+            });
+
+            if (res.ok) {
+                status.innerHTML = "✅ Registration sent successfully!";
+                status.style.color = "green";
+
+                setTimeout(() => {
+                    modal.style.display = 'none';
+                    document.getElementById('regForm').reset();
+                    status.innerHTML = "";
+                }, 2500);
             }
-        };
-    </script>
+        } catch (err) {
+            status.innerHTML = "❌ Error sending data";
+            status.style.color = "red";
+        } finally {
+            btn.innerText = "Send Application";
+            btn.disabled = false;
+        }
+    };
+</script>
+
 </body>
 </html>
