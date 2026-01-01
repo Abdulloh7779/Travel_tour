@@ -345,6 +345,52 @@
             btn.disabled = false;
         }
     };
+    
+    const counters = document.querySelectorAll('.stat-item h2');
+
+const animateCounter = (el, target, suffix = '') => {
+    let count = 0;
+    const duration = 2000;
+    const stepTime = 30;
+    const increment = target / (duration / stepTime);
+
+    const timer = setInterval(() => {
+        count += increment;
+        if (count >= target) {
+            el.innerText = target + suffix;
+            clearInterval(timer);
+        } else {
+            el.innerText = Math.floor(count) + suffix;
+        }
+    }, stepTime);
+};
+
+const startCounters = () => {
+    counters.forEach(counter => {
+        const text = counter.innerText;
+
+        if (text.includes('k')) {
+            animateCounter(counter, parseInt(text), 'k+');
+        } else if (text.includes('/')) {
+            counter.innerText = text; // 24/7 animatsiya qilinmaydi
+        } else {
+            animateCounter(counter, parseInt(text), '+');
+        }
+    });
+};
+
+// Scroll bilan trigger bo‘lishi uchun
+let statsStarted = false;
+const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting && !statsStarted) {
+            statsStarted = true;
+            startCounters();
+        }
+    });
+}, { threshold: 0.5 });
+
+observer.observe(document.querySelector('.stats-bar'));
 </script>
 
 </body>
